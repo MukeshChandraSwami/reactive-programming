@@ -14,6 +14,7 @@ public class FluxTest {
                 .concatWith(Flux.just("Before Error"))
                 .concatWith(Flux.error(() -> new RuntimeException("There is an error")))
                 .concatWith(Flux.just("After Error"))
+                .mergeWith(Flux.just("Merged Flux"))
                 .log()
                 .subscribe(data -> System.out.println(data),
                         e -> {
