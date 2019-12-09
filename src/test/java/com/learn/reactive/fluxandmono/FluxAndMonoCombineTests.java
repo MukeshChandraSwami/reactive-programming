@@ -3,6 +3,7 @@ package com.learn.reactive.fluxandmono;
 
 import org.junit.Test;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.time.Duration;
@@ -101,5 +102,13 @@ public class FluxAndMonoCombineTests {
                 .subscribe(System.out::println);
     }
 
+    @Test
+    public void testMono_Zip(){
+        Mono<String> mono1 = Mono.just("Reactive Streams");
+        Mono<String> mono2 = Mono.just("Spring Boot : Web Flux");
 
+        Mono.zip(mono1,mono2)
+        .log()
+        .subscribe(System.out::println);
+    }
 }
