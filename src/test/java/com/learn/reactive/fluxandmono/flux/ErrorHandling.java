@@ -2,6 +2,7 @@ package com.learn.reactive.fluxandmono.flux;
 
 import org.junit.Test;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public class ErrorHandling {
 
@@ -105,5 +106,102 @@ public class ErrorHandling {
                 .subscribe(obj -> {
                     System.out.println(obj);
                 });
+    }
+
+
+    /*
+    * Practice over error handling starts from here.
+    * */
+
+    @Test
+    public void testOnErrorReturn(){
+
+      Flux<Integer> flux =  Flux.just("10","20","30","Ex","40","50")
+                .map(this::doSomething)
+                .onErrorReturn(e -> e instanceof NumberFormatException,1000);
+        flux.subscribe(System.out::println,
+                e -> System.out.println("ERROR :- " + e));
+    }
+
+    @Test
+    public void testOnErrorResumeWithMap(){
+        Flux<Integer> flux = Flux.just("10","20","30","Ex","40","50")
+                .map(this::doSomething)
+                .onErrorResume(e -> {
+                    System.out.println("Error :- " + e.getMessage());
+                    return Flux.just(1000);
+                });
+
+        flux.subscribe(System.out::println, System.out::println);
+    }
+
+    @Test
+    public void testOnErrorResumeWithFlatMap(){
+
+        Flux<Integer> flux = Flux.just("10","20","30","Ex","40","50")
+                .flatMap(str -> parseToInt(str))
+                .onErrorResume(e -> e instanceof NullPointerException, e -> {
+                    System.out.println("Exception :- " + e.getMessage());
+                    return Flux.just(1000);
+                });
+
+        flux.subscribe(System.out::println);
+    }
+
+    @Test
+    public void testOnErrorResume_ReThrowAnotherException(){
+
+        Flux<Integer> flux = Flux.just("10","20","30","Ex","40","50")
+                .flatMap(this::parseToInt)
+                .onErrorResume(e -> Mono.error(new NullPointerException("User defined exception")));
+
+        flux.subscribe(System.out::println, System.out::println);
+    }
+
+    @Test
+    public void testOnErrorMap_ReThrowAnotherException(){
+
+        Flux<Integer> flux = Flux.just("10","20","30","Ex","40","50")
+                .flatMap(this::parseToInt)
+                .onErrorMap(e -> new NullPointerException("User defined exception"));
+
+        flux.subscribe(System.out::println, System.out::println);
+    }
+
+    @Test
+    public void testDoOnError(){
+
+        Flux<Integer> flux = Flux.just("10","20","30","Ex","40","50")
+                .flatMap(this::parseToInt)
+                .doOnError(e -> {
+                    System.out.println(e);
+                });
+        flux.subscribe(System.out::println, System.out::println);
+    }
+
+    @Test
+    public void testDoFinally(){
+        Flux<String> flux = Flux.just("10","20","30","Ex","40","50")
+                .doFinally(System.out::println)
+                .doFinally(signalType -> {
+                    System.out.println("2 : " + signalType.name());
+                })
+                /*.doOnTerminate(() -> {
+                    System.out.println("Termination executed");
+                })*/
+                /*.take(2)*/;
+
+        flux.subscribe(System.out::println);
+    }
+
+    private int doSomething(String s) {
+
+        return Integer.parseInt(s);
+    }
+
+    private Flux<Integer> parseToInt(String s){
+
+        int i = Integer.parseInt(s);
+        return Flux.just(i);
     }
 }

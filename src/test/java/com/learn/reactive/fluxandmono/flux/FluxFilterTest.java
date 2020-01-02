@@ -1,11 +1,16 @@
 package com.learn.reactive.fluxandmono.flux;
 
+import com.learn.reactive.model.Author;
+import lombok.SneakyThrows;
 import org.junit.Test;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static reactor.core.scheduler.Schedulers.parallel;
 
@@ -103,13 +108,57 @@ public class FluxFilterTest {
                 .flatMapSequential(flux ->
                         flux.map(this::getList)
                                .subscribeOn(parallel())
-                                .flatMap(s -> Flux.fromIterable(s))
+                               .flatMap(s -> Flux.fromIterable(s))
                 ).log();
 
         StepVerifier.create(stringFlux)
                 .expectNextCount(techs.size() * 2)
                 .verifyComplete();
     }
+
+    /*
+    * Practice over flatMap and its types
+    * */
+    @Test
+    public void testFlatMap(){
+
+        Flux<Author> flux = Flux.just("1","2","3","4","5")
+                .flatMap(id -> this.getEmploye(id));
+
+        flux.subscribe(val -> System.out.println(val),
+                e -> System.out.println(e));
+    }
+
+    @Test
+    public void testFlatMapWithWindow(){
+
+        Flux<Author> flux = Flux.just("1","2","3","4","5")
+                .window(2)
+                .flatMap(stringFlux -> stringFlux
+                        .subscribeOn(parallel())
+                        .flatMap(this::getEmploye)
+                );
+
+        flux.log()
+                .subscribe(/*val -> System.out.println(val),
+                e -> System.out.println(e)*/);
+    }
+
+    @SneakyThrows
+    private Flux<Author> getEmploye(String empId){
+
+        Map<String, Author> authors = new HashMap<>();
+        authors.put("1", new Author("Sonam","1","book1"));
+        authors.put("2", new Author("Nitesh","2","book2"));
+        authors.put("3", new Author("Rakesh","3","book3"));
+        authors.put("4", new Author("Lizel","4","book4"));
+        authors.put("5", new Author("Ganesha","5","book5"));
+
+        Thread.sleep(1000);
+        return Flux.just(authors.get(empId));
+    }
+
+
 
     private List<String> getList(String str){
         try {
