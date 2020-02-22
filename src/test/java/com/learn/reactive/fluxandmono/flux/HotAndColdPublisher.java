@@ -3,11 +3,13 @@ package com.learn.reactive.fluxandmono.flux;
 import lombok.SneakyThrows;
 import org.junit.Test;
 import org.reactivestreams.Publisher;
+import org.springframework.test.annotation.DirtiesContext;
 import reactor.core.publisher.ConnectableFlux;
 import reactor.core.publisher.Flux;
 
 import java.time.Duration;
 
+@DirtiesContext
 public class HotAndColdPublisher {
 
     @SneakyThrows

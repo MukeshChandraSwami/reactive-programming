@@ -2,10 +2,12 @@ package com.learn.reactive.fluxandmono.flux;
 
 import lombok.SneakyThrows;
 import org.junit.Test;
+import org.springframework.test.annotation.DirtiesContext;
 import reactor.core.publisher.BaseSubscriber;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
+@DirtiesContext
 public class BackPressureSupportTest {
 
     @Test

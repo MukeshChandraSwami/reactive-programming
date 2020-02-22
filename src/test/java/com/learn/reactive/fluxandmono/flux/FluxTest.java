@@ -1,10 +1,12 @@
 package com.learn.reactive.fluxandmono.flux;
 
 import org.junit.Test;
+import org.springframework.test.annotation.DirtiesContext;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 import reactor.test.StepVerifierOptions;
 
+@DirtiesContext
 public class FluxTest {
 
     @Test

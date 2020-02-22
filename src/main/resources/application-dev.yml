@@ -1,0 +1,8 @@
+spring:
+  data.mongodb:
+    database: book-store
+    host: localhost
+    port: 27017
+
+test:
+  msg: dev profile is active

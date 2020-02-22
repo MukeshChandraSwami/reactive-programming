@@ -1,9 +1,11 @@
 package com.learn.reactive.fluxandmono.flux;
 
 import org.junit.Test;
+import org.springframework.test.annotation.DirtiesContext;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+@DirtiesContext
 public class ErrorHandling {
 
     /**

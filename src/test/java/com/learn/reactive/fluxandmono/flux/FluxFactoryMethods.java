@@ -1,6 +1,7 @@
 package com.learn.reactive.fluxandmono.flux;
 
 import org.junit.Test;
+import org.springframework.test.annotation.DirtiesContext;
 import reactor.core.publisher.Flux;
 
 import java.util.Arrays;
@@ -10,6 +11,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+@DirtiesContext
 public class FluxFactoryMethods {
 
     private static final List<String> techs = Arrays.asList("Reactive", "Streams", "Lambda", "Publisher", "Subscriber", "Subscription", "Processor");
