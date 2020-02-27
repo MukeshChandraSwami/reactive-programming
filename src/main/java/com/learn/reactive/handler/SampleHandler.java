@@ -13,7 +13,6 @@ import java.time.Duration;
 @Component
 public class SampleHandler {
 
-
     public Mono<ServerResponse> flux(ServerRequest serverRequest) {
 
         return ServerResponse.ok()

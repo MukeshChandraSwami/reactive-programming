@@ -17,7 +17,7 @@ public class RouterConfiguration {
     SampleHandler sampleHandler;
 
     @Bean
-    public RouterFunction<ServerResponse> sampleHandlerRouter(){
+    public RouterFunction<ServerResponse> sampleHandlerRouter() {
 
         RouterFunction<ServerResponse> route = RouterFunctions
                 .route(RequestPredicates.GET("/flux/get").and(RequestPredicates.accept(MediaType.APPLICATION_JSON)),
