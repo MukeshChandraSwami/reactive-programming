@@ -8,6 +8,7 @@ public class ApiEndPoints {
     public static final String DELETE_API = "/delete";
     public static final String PUT_API = "/update";
     public static final String ALL = "/all";
+    public static final String SLASH = "/";
 
     // API versions
     public static final String V1 = "/v1";

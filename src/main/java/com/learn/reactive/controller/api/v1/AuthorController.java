@@ -1,10 +1,8 @@
 package com.learn.reactive.controller.api.v1;
 
 import com.learn.reactive.constants.ApiEndPoints;
-import com.learn.reactive.entity.AuthorEO;
 import com.learn.reactive.request.AuthorRequest;
 import com.learn.reactive.response.AuthorResponse;
-import com.learn.reactive.response.DeleteResponse;
 import com.learn.reactive.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -27,32 +25,32 @@ public class AuthorController {
     AuthorService authorService;
 
     @GetMapping(value = ApiEndPoints.GET_API + ApiEndPoints.ALL,produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
-    public Flux<AuthorEO> getAllAuthors() {
+    public Flux<AuthorResponse> getAll() {
 
-        return authorService.getAllAuthors();
+        return authorService.getAll();
     }
 
     @GetMapping("/{id}"+ApiEndPoints.GET_API)
-    public Mono<AuthorResponse> getOtherById(@PathVariable (name = "id", required = true) String id) {
+    public Mono<AuthorResponse> getById(@PathVariable (name = "id", required = true) String id) {
 
-        return null;
+        return authorService.getById(id);
     }
 
     @PostMapping(ApiEndPoints.POST_API)
-    public Mono<AuthorResponse> createAuthor(@RequestBody AuthorRequest request) {
+    public Mono<AuthorResponse> create(@RequestBody AuthorRequest request) {
 
-        return null;
+        return authorService.create(request);
     }
 
     @DeleteMapping("/{id}"+ApiEndPoints.DELETE_API)
-    public Mono<DeleteResponse> deleteAuthorById(@PathVariable (name = "id", required = true) String id) {
+    public Mono<AuthorResponse> deleteById(@PathVariable (name = "id", required = true) String id) {
 
-        return null;
+        return authorService.deleteById(id);
     }
 
     @PutMapping(ApiEndPoints.PUT_API)
-    public Mono<AuthorResponse> updateAuthor(@RequestBody AuthorRequest request) {
+    public Mono<AuthorResponse> update(@RequestBody AuthorRequest request) {
 
-        return null;
+        return authorService.update(request);
     }
 }
