@@ -3,18 +3,16 @@ package com.learn.reactive.service;
 import com.learn.reactive.constants.ResponseCode;
 import com.learn.reactive.constants.ResponseMsg;
 import com.learn.reactive.entity.AuthorEO;
-import com.learn.reactive.model.Author;
 import com.learn.reactive.repository.AuthorRepo;
 import com.learn.reactive.request.AuthorRequest;
 import com.learn.reactive.response.AuthorResponse;
+import com.learn.reactive.response.CounterResponse;
 import com.learn.reactive.utils.AuthorUtils;
 import com.learn.reactive.utils.OrikaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.Objects;
 
 @Service
 public class AuthorService {
@@ -34,6 +32,7 @@ public class AuthorService {
     public Mono<AuthorResponse> getById(String id) {
         return authorRepo.findById(id)
                 .map(authorEO -> {
+                    System.out.println("Author :- " + authorEO);
                     return AuthorUtils.success(ResponseMsg.FOUND,ResponseCode.FOUND,authorEO);
                 })
                 .defaultIfEmpty(AuthorUtils.fail(ResponseMsg.NOT_FOUND, ResponseCode.NOT_FOUND));
@@ -97,5 +96,12 @@ public class AuthorService {
                             .defaultIfEmpty(AuthorUtils.fail(ResponseMsg.NOT_UPDATED, ResponseCode.NOT_UPDATED));
                 })
                 .defaultIfEmpty(AuthorUtils.fail(ResponseMsg.NOT_FOUND, ResponseCode.NOT_FOUND));
+    }
+
+    public Mono<CounterResponse> count() {
+        return authorRepo.count()
+                .map(authorCounter -> {
+                    return new CounterResponse(true,ResponseMsg.SUCCESS,ResponseCode.SUCCESS,authorCounter);
+                }).defaultIfEmpty(new CounterResponse(false,ResponseMsg.FAILED, ResponseCode.FAILED,null));
     }
 }

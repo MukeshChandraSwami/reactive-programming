@@ -3,6 +3,7 @@ package com.learn.reactive.controller.api.v1;
 import com.learn.reactive.constants.ApiEndPoints;
 import com.learn.reactive.request.AuthorRequest;
 import com.learn.reactive.response.AuthorResponse;
+import com.learn.reactive.response.CounterResponse;
 import com.learn.reactive.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -34,6 +35,11 @@ public class AuthorController {
     public Mono<AuthorResponse> getById(@PathVariable (name = "id", required = true) String id) {
 
         return authorService.getById(id);
+    }
+
+    @GetMapping(ApiEndPoints.COUNT)
+    public Mono<CounterResponse> count() {
+        return authorService.count();
     }
 
     @PostMapping(ApiEndPoints.POST_API)

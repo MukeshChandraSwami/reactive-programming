@@ -5,6 +5,7 @@ public class ResponseMsg {
     /******************** Success ********************/
     // Get
     public static final String FOUND = "Available";
+    public static final String SUCCESS = "Success";
 
     // Post & Put
     public static final String CREATED = "Created";
@@ -18,6 +19,7 @@ public class ResponseMsg {
     // Get
     public static final String NOT_FOUND = "Not Available";
     public static final String AUTHORS_NOT_FOUD = "Authors are not available";
+    public static final String FAILED = "Failed";
 
     // Post & Put
     public static final String NOT_CREATED = "Not Created";

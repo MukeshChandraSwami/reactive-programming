@@ -25,9 +25,9 @@ import java.util.stream.Stream;
 @AutoConfigureWebTestClient
 public class AuthorControllerTest {
 
-    Stream<AuthorEO> authors = Arrays.asList(new AuthorEO("Mukesh","9530105788", null),
-            new AuthorEO("Sonam","8387022222", null),
-            new AuthorEO("Lucky","8766602057",null)).stream();
+    Stream<AuthorEO> authors = Arrays.asList(new AuthorEO(null,null,null,null,null, null,"Mukesh","9530105788",null),
+            new AuthorEO(null,null,null,null,null, null,"Sonam","8387022222",null),
+            new AuthorEO("l1",null,null,null,null, null,"Lucky","8766602057",null)).stream();
 
     @Autowired
     WebTestClient client;

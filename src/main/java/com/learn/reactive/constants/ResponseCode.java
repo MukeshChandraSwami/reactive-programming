@@ -5,6 +5,7 @@ public class ResponseCode {
     /******************** Success ********************/
     // Get
     public static final String FOUND = "200";
+    public static final String SUCCESS = "200";
 
     // Post & Put
     public static final String CREATED = "201";
@@ -17,6 +18,7 @@ public class ResponseCode {
     /******************** Error **********************/
     // Get
     public static final String NOT_FOUND = "400";
+    public static final String FAILED = "400";
 
     // Post & Put
     public static final String NOT_CREATED = "500";
