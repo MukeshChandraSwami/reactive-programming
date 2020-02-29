@@ -48,9 +48,10 @@ public class AuthorController {
         return authorService.deleteById(id);
     }
 
-    @PutMapping(ApiEndPoints.PUT_API)
-    public Mono<AuthorResponse> update(@RequestBody AuthorRequest request) {
+    @PutMapping("/{id}"+ApiEndPoints.PUT_API)
+    public Mono<AuthorResponse> update(@RequestBody AuthorRequest request,
+                                       @PathVariable (name = "id", required = true) String id) {
 
-        return authorService.update(request);
+        return authorService.update(id, request);
     }
 }

@@ -8,6 +8,7 @@ public class ResponseMsg {
 
     // Post & Put
     public static final String CREATED = "Created";
+    public static final String UPDATED = "Updated";
 
     // Delete
     public static final String DELETED = "DELETED";
@@ -19,6 +20,7 @@ public class ResponseMsg {
 
     // Post & Put
     public static final String NOT_CREATED = "Not Created";
+    public static final String NOT_UPDATED = "Not Updated";
 
     // Delete
     public static final String NOT_DELETED = "Not Deleted";

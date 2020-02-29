@@ -8,6 +8,7 @@ public class ResponseCode {
 
     // Post & Put
     public static final String CREATED = "201";
+    public static final String UPDATED = "251";
 
     // Delete
     public static final String DELETED = "200";
@@ -18,7 +19,9 @@ public class ResponseCode {
 
     // Post & Put
     public static final String NOT_CREATED = "500";
+    public static final String NOT_UPDATED = "551";
 
     // Delete
     public static final String NOT_DELETED = "600";
+
 }

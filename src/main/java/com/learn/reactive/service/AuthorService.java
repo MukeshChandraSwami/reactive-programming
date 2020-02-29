@@ -3,6 +3,7 @@ package com.learn.reactive.service;
 import com.learn.reactive.constants.ResponseCode;
 import com.learn.reactive.constants.ResponseMsg;
 import com.learn.reactive.entity.AuthorEO;
+import com.learn.reactive.model.Author;
 import com.learn.reactive.repository.AuthorRepo;
 import com.learn.reactive.request.AuthorRequest;
 import com.learn.reactive.response.AuthorResponse;
@@ -64,7 +65,17 @@ public class AuthorService {
                 .defaultIfEmpty(AuthorUtils.fail(ResponseMsg.NOT_FOUND, ResponseCode.NOT_FOUND));
     }
 
-    public Mono<AuthorResponse> update(AuthorRequest request) {
-        return null;
+    public Mono<AuthorResponse> update(String id, AuthorRequest request) {
+        return authorRepo.findById(id)
+                .flatMap(authorEO -> {
+                    AuthorEO updatedAuthor =  new OrikaMapper<>(request, AuthorEO.class).map();
+                    updatedAuthor.setId(authorEO.getId());
+                    return authorRepo.save(updatedAuthor)
+                            .map(a -> {
+                                return AuthorUtils.success(ResponseMsg.UPDATED,ResponseCode.UPDATED,a);
+                            })
+                            .defaultIfEmpty(AuthorUtils.fail(ResponseMsg.NOT_UPDATED, ResponseCode.NOT_UPDATED));
+                })
+                .defaultIfEmpty(AuthorUtils.fail(ResponseMsg.NOT_FOUND, ResponseCode.NOT_FOUND));
     }
 }
