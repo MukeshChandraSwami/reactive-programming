@@ -30,7 +30,7 @@ public class AuthorController {
         return authorService.getAll();
     }
 
-    @GetMapping("/{id}"+ApiEndPoints.GET_API)
+    @GetMapping("/{id}" + ApiEndPoints.GET_API)
     public Mono<AuthorResponse> getById(@PathVariable (name = "id", required = true) String id) {
 
         return authorService.getById(id);
@@ -42,13 +42,19 @@ public class AuthorController {
         return authorService.create(request);
     }
 
-    @DeleteMapping("/{id}"+ApiEndPoints.DELETE_API)
+    @DeleteMapping("/{id}" + ApiEndPoints.DELETE_API)
     public Mono<AuthorResponse> deleteById(@PathVariable (name = "id", required = true) String id) {
 
         return authorService.deleteById(id);
     }
 
-    @PutMapping("/{id}"+ApiEndPoints.PUT_API)
+    @DeleteMapping(ApiEndPoints.DELETE_API + ApiEndPoints.ALL)
+    public Mono<AuthorResponse> deleteAll() {
+
+        return authorService.deleteAll();
+    }
+
+    @PutMapping("/{id}" + ApiEndPoints.PUT_API)
     public Mono<AuthorResponse> update(@RequestBody AuthorRequest request,
                                        @PathVariable (name = "id", required = true) String id) {
 

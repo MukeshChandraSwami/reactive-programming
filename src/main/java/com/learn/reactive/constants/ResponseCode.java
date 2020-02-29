@@ -11,7 +11,8 @@ public class ResponseCode {
     public static final String UPDATED = "251";
 
     // Delete
-    public static final String DELETED = "200";
+    public static final String DELETED = "300";
+    public static final String NO_DATA_FOUND = "301";
 
     /******************** Error **********************/
     // Get
@@ -23,5 +24,4 @@ public class ResponseCode {
 
     // Delete
     public static final String NOT_DELETED = "600";
-
 }

@@ -65,6 +65,26 @@ public class AuthorService {
                 .defaultIfEmpty(AuthorUtils.fail(ResponseMsg.NOT_FOUND, ResponseCode.NOT_FOUND));
     }
 
+    public Mono<AuthorResponse> deleteAll() {
+        return authorRepo.count()
+                .flatMap(counter -> {
+                    if(counter > 0) {
+                       return authorRepo.deleteAll()
+                                .then(authorRepo.count())
+                                .map(countAfterDeletion -> {
+                                    if(countAfterDeletion > 0) {
+                                        return AuthorUtils.fail(ResponseMsg.NOT_DELETED, ResponseCode.NOT_DELETED);
+                                    } else {
+                                        return AuthorUtils.success(ResponseMsg.DELETED, ResponseCode.DELETED,null);
+                                    }
+                                });
+                    } else {
+                        return Mono.just(AuthorUtils.success(ResponseMsg.NO_DATA_FOUND, ResponseCode.NO_DATA_FOUND, null));
+                    }
+                })
+                .defaultIfEmpty(AuthorUtils.fail(ResponseMsg.NOT_FOUND, ResponseCode.NOT_FOUND));
+    }
+
     public Mono<AuthorResponse> update(String id, AuthorRequest request) {
         return authorRepo.findById(id)
                 .flatMap(authorEO -> {

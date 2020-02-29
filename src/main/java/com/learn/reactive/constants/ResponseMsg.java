@@ -12,6 +12,7 @@ public class ResponseMsg {
 
     // Delete
     public static final String DELETED = "DELETED";
+    public static final String NO_DATA_FOUND = "No data available";
 
     /******************* Error ***********************/
     // Get
