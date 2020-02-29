@@ -45,4 +45,12 @@ public class MonoTest {
                 .log()
                 .subscribe(objectMono -> System.out.println(objectMono));
     }
+
+    @Test
+    public void testMono_hasElement() {
+
+        Mono<Boolean> booleanMono = Mono.empty()
+                .hasElement();
+        booleanMono.subscribe(System.out::println);
+    }
 }

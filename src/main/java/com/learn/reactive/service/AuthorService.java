@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Objects;
+
 @Service
 public class AuthorService {
 
@@ -46,11 +48,20 @@ public class AuthorService {
     }
 
     public Mono<AuthorResponse> deleteById(String id) {
-        // ToDo : Update this code for working fine.
-        return authorRepo.deleteById(id)
-                .then(getById(id))
-                .hasElement().then(Mono.just(AuthorUtils.fail(ResponseMsg.NOT_DELETED, ResponseCode.NOT_DELETED)))
-                .defaultIfEmpty(AuthorUtils.success(ResponseMsg.DELETED, ResponseCode.DELETED, null));
+
+        return authorRepo.findById(id)
+                .flatMap(authorEO -> {
+                    return authorRepo.deleteById(id)
+                            .then(getById(id))
+                            .map(authorResponse -> {
+                                   if(authorResponse.isSuccess() && authorResponse.getResponseCode().equalsIgnoreCase(ResponseCode.FOUND)) {
+                                        return AuthorUtils.fail(ResponseMsg.NOT_DELETED, ResponseCode.NOT_DELETED);
+                                    } else {
+                                        return AuthorUtils.success(ResponseMsg.DELETED, ResponseCode.DELETED, null);
+                                    }
+                            });
+                })
+                .defaultIfEmpty(AuthorUtils.fail(ResponseMsg.NOT_FOUND, ResponseCode.NOT_FOUND));
     }
 
     public Mono<AuthorResponse> update(AuthorRequest request) {
