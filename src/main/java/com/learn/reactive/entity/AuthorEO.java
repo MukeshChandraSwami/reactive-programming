@@ -4,13 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Document(collection = "author")
@@ -18,10 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 public class AuthorEO {
 
-    @Id
-    private String id;
-    @Version
-    private Long version;
+    private String id = UUID.randomUUID().toString() + (new Date().getTime() * (long)Math.random());
     @CreatedDate
     private Date createdAt;
     @LastModifiedDate
@@ -32,5 +29,4 @@ public class AuthorEO {
 
     private String name;
     private String contactNum;
-    private List<String> books;
 }

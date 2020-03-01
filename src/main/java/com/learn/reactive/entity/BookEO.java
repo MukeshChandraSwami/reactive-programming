@@ -1,17 +1,16 @@
 package com.learn.reactive.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.learn.reactive.constants.enums.BookLanguage;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Data
 @Document(collection = "book")
@@ -19,10 +18,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class BookEO {
 
-    @Id
-    private String id;
-    @Version
-    private long version;
+    private String id = UUID.randomUUID().toString() + (new Date().getTime() * (long)Math.random());
     @CreatedDate
     //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm")
     private Date createdAt;

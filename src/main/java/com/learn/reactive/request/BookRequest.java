@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @Data
 public class BookRequest {
 
+    private String createdBy;
+    private String updatedBy;
     private String name;
     private String author;
     private String publication;

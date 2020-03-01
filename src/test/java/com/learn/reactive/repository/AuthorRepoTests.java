@@ -19,9 +19,9 @@ import java.util.stream.Stream;
 @DirtiesContext
 public class AuthorRepoTests {
 
-    Stream<AuthorEO> authors = Arrays.asList(new AuthorEO(null,null,null,null,null, null,"Mukesh","9530105788",null),
-            new AuthorEO(null,null,null,null,null, null,"Sonam","8387022222",null),
-            new AuthorEO("l1",null,null,null,null, null,"Lucky","8766602057",null)).stream();
+    Stream<AuthorEO> authors = Arrays.asList(new AuthorEO(null,null,null,null, null,"Mukesh","9530105788"),
+            new AuthorEO(null,null,null,null, null,"Sonam","8387022222"),
+            new AuthorEO("l1",null,null,null, null,"Lucky","8766602057")).stream();
 
     @Autowired
     AuthorRepo authorRepo;

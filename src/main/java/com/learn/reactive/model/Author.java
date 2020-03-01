@@ -14,5 +14,4 @@ public class Author {
     private String id;
     private String name;
     private String contactNum;
-    private List<String> books;
 }
