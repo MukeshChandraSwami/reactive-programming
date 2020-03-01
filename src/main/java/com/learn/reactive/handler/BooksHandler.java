@@ -29,7 +29,16 @@ public class BooksHandler {
         String id = request.pathVariable("id");
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(bookService.getById(id), BookResponse.class);
+                .body(bookService.findById(id), BookResponse.class);
+    }
+
+    public Mono<ServerResponse> getByAuthorId(ServerRequest request) {
+
+        String authorId = request.pathVariable("authorId");
+
+        return ServerResponse.ok()
+                .contentType(MediaType.APPLICATION_STREAM_JSON)
+                .body(bookService.findByAuthorId(authorId),BookResponse.class);
     }
 
     public Mono<ServerResponse> create(ServerRequest request) {
@@ -52,6 +61,14 @@ public class BooksHandler {
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(bookService.deleteAll(),BookResponse.class);
+    }
+
+    public Mono<ServerResponse> deleteByAuthor(ServerRequest request) {
+
+        String authorId =  request.pathVariable("authorId");
+        return ServerResponse.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(bookService.deleteByAuthor(authorId),BookResponse.class);
     }
 
     public Mono<ServerResponse> update(ServerRequest request) {

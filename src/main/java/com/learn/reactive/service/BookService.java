@@ -30,8 +30,15 @@ public class BookService {
                 }).defaultIfEmpty(BookUtils.fail(ResponseMsg.BOOKS_NOT_FOUND, ResponseCode.NOT_FOUND));
     }
 
-    public Mono<BookResponse> getById(String id) {
+    public Mono<BookResponse> findById(String id) {
         return bookRepo.findById(id)
+                .map(bookEO -> {
+                    return BookUtils.success(ResponseMsg.FOUND, ResponseCode.FOUND,bookEO);
+                }).defaultIfEmpty(BookUtils.fail(ResponseMsg.NOT_FOUND,ResponseCode.NOT_FOUND));
+    }
+
+    public Flux<BookResponse> findByAuthorId(String authorId) {
+        return bookRepo.findByAuthor(authorId)
                 .map(bookEO -> {
                     return BookUtils.success(ResponseMsg.FOUND, ResponseCode.FOUND,bookEO);
                 }).defaultIfEmpty(BookUtils.fail(ResponseMsg.NOT_FOUND,ResponseCode.NOT_FOUND));
@@ -57,7 +64,7 @@ public class BookService {
         return bookRepo.findById(id)
                 .flatMap(bookEO -> {
                     return bookRepo.deleteById(id)
-                            .then(getById(id))
+                            .then(findById(id))
                             .map(bookResponse -> {
                                 if(bookResponse.isSuccess()) {
                                     return BookUtils.fail(ResponseMsg.NOT_DELETED, ResponseCode.NOT_DELETED);
@@ -88,6 +95,31 @@ public class BookService {
                     }
                 })
                 .defaultIfEmpty(BookUtils.fail(ResponseMsg.NOT_FOUND,ResponseCode.NOT_FOUND));
+    }
+
+    public Mono<BookResponse> deleteByAuthor(String authorId) {
+
+        // TO-DO : This is not working correctly. Update it.
+        return authorService.getById(authorId)
+                .flatMap(authorResponse -> {
+                    if(authorResponse.isSuccess() && authorResponse.getResponseCode().equalsIgnoreCase(ResponseCode.FOUND)) {
+                        return bookRepo.deleteByAuthor(authorId)
+                                .thenMany(findByAuthorId(authorId))
+                                .next()
+                                .map(bookResponse -> {
+                                    System.out.println("Book Response :- " + bookResponse);
+                                    if(bookResponse.isSuccess() && bookResponse.getResponseCode().equalsIgnoreCase(ResponseCode.FOUND)) {
+                                        return BookUtils.fail(ResponseMsg.NOT_DELETED, ResponseCode.NOT_DELETED);
+                                    } else if(bookResponse.getResponseCode().equalsIgnoreCase(ResponseCode.NOT_FOUND)) {
+                                        return BookUtils.fail(ResponseMsg.NOT_FOUND,ResponseCode.NOT_FOUND);
+                                    } else {
+                                        return BookUtils.success(ResponseMsg.DELETED, ResponseCode.DELETED, null);
+                                    }
+                                });
+                    } else {
+                        return Mono.just(BookUtils.fail(ResponseMsg.AUTHORS_NOT_FOUD,ResponseCode.NOT_FOUND));
+                    }
+                }).defaultIfEmpty(BookUtils.fail(ResponseMsg.FAILED,ResponseCode.FAILED));
     }
 
     public Mono<BookResponse> update(String id, BookRequest request) {

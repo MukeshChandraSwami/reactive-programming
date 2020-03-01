@@ -20,6 +20,9 @@ public class AuthorService {
     @Autowired
     AuthorRepo authorRepo;
 
+    @Autowired
+    BookService bookService;
+
     public Flux<AuthorResponse> getAll() {
 
         return authorRepo.findAll()
@@ -47,7 +50,7 @@ public class AuthorService {
                 .defaultIfEmpty(AuthorUtils.fail(ResponseMsg.NOT_CREATED, ResponseCode.NOT_CREATED));
     }
 
-    public Mono<AuthorResponse> deleteById(String id) {
+    public Mono<AuthorResponse> deleteById(String id, boolean deleteBooks) {
 
         return authorRepo.findById(id)
                 .flatMap(authorEO -> {

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -49,9 +50,10 @@ public class AuthorController {
     }
 
     @DeleteMapping("/{id}" + ApiEndPoints.DELETE_API)
-    public Mono<AuthorResponse> deleteById(@PathVariable (name = "id", required = true) String id) {
+    public Mono<AuthorResponse> deleteById(@PathVariable (name = "id", required = true) String id,
+                                           @RequestParam (name = "deleteBooks", required = false) boolean deleteBooks) {
 
-        return authorService.deleteById(id);
+        return authorService.deleteById(id, deleteBooks);
     }
 
     @DeleteMapping(ApiEndPoints.DELETE_API + ApiEndPoints.ALL)
