@@ -89,6 +89,8 @@ public class AuthorService {
                 .flatMap(authorEO -> {
                     AuthorEO updatedAuthor =  new OrikaMapper<>(request, AuthorEO.class).map();
                     updatedAuthor.setId(authorEO.getId());
+                    updatedAuthor.setCreatedAt(authorEO.getCreatedAt());
+                    updatedAuthor.setCreatedBy(authorEO.getCreatedBy());
                     return authorRepo.save(updatedAuthor)
                             .map(a -> {
                                 return AuthorUtils.success(ResponseMsg.UPDATED,ResponseCode.UPDATED,a);

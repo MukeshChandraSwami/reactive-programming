@@ -19,6 +19,7 @@ public class ResponseMsg {
     // Get
     public static final String NOT_FOUND = "Not Available";
     public static final String AUTHORS_NOT_FOUD = "Authors are not available";
+    public static final String BOOKS_NOT_FOUND = "Books are not available";
     public static final String FAILED = "Failed";
 
     // Post & Put

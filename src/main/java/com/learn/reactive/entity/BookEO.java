@@ -36,4 +36,5 @@ public class BookEO {
     private String publicationDate;
     private BookLanguage language;
     private String title;
+    private String archived;
 }
