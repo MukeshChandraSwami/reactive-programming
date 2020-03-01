@@ -1,6 +1,8 @@
 package com.learn.reactive.handler;
 
+import com.learn.reactive.request.BookRequest;
 import com.learn.reactive.response.BookResponse;
+import com.learn.reactive.response.CounterResponse;
 import com.learn.reactive.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -20,6 +22,53 @@ public class BooksHandler {
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_STREAM_JSON)
                 .body(bookService.findAll(), BookResponse.class);
+    }
+
+    public Mono<ServerResponse> getById(ServerRequest request) {
+
+        String id = request.pathVariable("id");
+        return ServerResponse.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(bookService.getById(id), BookResponse.class);
+    }
+
+    public Mono<ServerResponse> create(ServerRequest request) {
+        Mono<BookRequest> bookRequestMono = request.bodyToMono(BookRequest.class);
+        return bookRequestMono.flatMap(bookRequest -> {
+            return ServerResponse.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(bookService.create(bookRequest),BookResponse.class);
+        });
+    }
+
+    public Mono<ServerResponse> deleteById(ServerRequest request) {
+        String id =  request.pathVariable("id");
+        return ServerResponse.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(bookService.deleteById(id),BookResponse.class);
+    }
+
+    public Mono<ServerResponse> deleteAll(ServerRequest request) {
+        return ServerResponse.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(bookService.deleteAll(),BookResponse.class);
+    }
+
+    public Mono<ServerResponse> update(ServerRequest request) {
+
+        String id = request.pathVariable("id");
+        Mono<BookRequest> bookRequestMono = request.bodyToMono(BookRequest.class);
+        return bookRequestMono.flatMap(bookRequest -> {
+            return ServerResponse.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(bookService.update(id,bookRequest),BookResponse.class);
+        });
+    }
+
+    public Mono<ServerResponse> count(ServerRequest request) {
+        return ServerResponse.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(bookService.count(), CounterResponse.class);
     }
 
 }

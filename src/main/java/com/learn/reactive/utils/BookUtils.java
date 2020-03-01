@@ -20,6 +20,6 @@ public class BookUtils {
                 bookEO != null ? bookEO.getUpdatedAt() : null,
                 bookEO != null ? bookEO.getCreatedBy() : null,
                 bookEO != null ? bookEO.getUpdatedBy() : null,
-                new OrikaMapper<BookEO, Book>(bookEO,Book.class).map());
+                bookEO != null ? new OrikaMapper<BookEO, Book>(bookEO,Book.class).map() : null);
     }
 }

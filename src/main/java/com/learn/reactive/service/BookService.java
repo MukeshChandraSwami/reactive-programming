@@ -20,6 +20,9 @@ public class BookService {
     @Autowired
     BookRepo bookRepo;
 
+    @Autowired
+    AuthorService authorService;
+
     public Flux<BookResponse> findAll() {
         return bookRepo.findAll()
                 .map(bookEO -> {
@@ -35,10 +38,19 @@ public class BookService {
     }
 
     public Mono<BookResponse> create(BookRequest request) {
-        return bookRepo.save(new OrikaMapper<BookRequest, BookEO>(request,BookEO.class).map())
-                .map(bookEO -> {
-                    return BookUtils.success(ResponseMsg.CREATED, ResponseMsg.CREATED,bookEO);
-                }).defaultIfEmpty(BookUtils.fail(ResponseMsg.NOT_CREATED,ResponseMsg.NOT_CREATED));
+
+       return authorService.getById(request.getAuthor())
+                .flatMap(authorResponse -> {
+                    if(authorResponse.isSuccess() && authorResponse.getResponseCode().equalsIgnoreCase(ResponseCode.FOUND)) {
+                        return bookRepo.save(new OrikaMapper<>(request,BookEO.class).map())
+                                .map(bookEO -> {
+                                    return BookUtils.success(ResponseMsg.CREATED, ResponseMsg.CREATED,bookEO);
+                                }).defaultIfEmpty(BookUtils.fail(ResponseMsg.NOT_CREATED,ResponseMsg.NOT_CREATED));
+                    } else {
+                        return Mono.just(BookUtils.fail(ResponseMsg.AuthorResponseMsg.INVALID_AUTHOR, ResponseCode.AuthorResponseCode.INVALID_AUTHOR));
+                    }
+                })
+                .defaultIfEmpty(BookUtils.fail(ResponseMsg.FAILED, ResponseCode.FAILED));
     }
 
     public Mono<BookResponse> deleteById(String id) {
@@ -80,19 +92,26 @@ public class BookService {
 
     public Mono<BookResponse> update(String id, BookRequest request) {
 
-        return bookRepo.findById(id)
-                .flatMap(bookEO -> {
-                    BookEO updatedBook = new OrikaMapper<BookRequest,BookEO>(request,BookEO.class).map();
-                    updatedBook.setId(bookEO.getId());
-                    updatedBook.setCreatedBy(bookEO.getCreatedBy());
-                    updatedBook.setCreatedAt(bookEO.getCreatedAt());
+        return authorService.getById(request.getAuthor())
+                .flatMap(authorResponse -> {
+                    if(authorResponse.isSuccess() && authorResponse.getResponseCode().equalsIgnoreCase(ResponseCode.FOUND)) {
+                        return bookRepo.findById(id)
+                                .flatMap(bookEO -> {
+                                    BookEO updatedBook = new OrikaMapper<>(request,BookEO.class).map();
+                                    updatedBook.setId(bookEO.getId());
+                                    updatedBook.setCreatedBy(bookEO.getCreatedBy());
+                                    updatedBook.setCreatedAt(bookEO.getCreatedAt());
 
-                    return bookRepo.save(updatedBook)
-                            .map(updatedBookEO -> {
-                                return BookUtils.success(ResponseMsg.UPDATED, ResponseCode.UPDATED, updatedBookEO);
-                            })
-                            .defaultIfEmpty(BookUtils.fail(ResponseMsg.NOT_UPDATED,ResponseCode.NOT_UPDATED));
-                }).defaultIfEmpty(BookUtils.fail(ResponseMsg.NOT_FOUND,ResponseCode.NOT_FOUND));
+                                    return bookRepo.save(updatedBook)
+                                            .map(updatedBookEO -> {
+                                                return BookUtils.success(ResponseMsg.UPDATED, ResponseCode.UPDATED, updatedBookEO);
+                                            })
+                                            .defaultIfEmpty(BookUtils.fail(ResponseMsg.NOT_UPDATED,ResponseCode.NOT_UPDATED));
+                                }).defaultIfEmpty(BookUtils.fail(ResponseMsg.NOT_FOUND,ResponseCode.NOT_FOUND));
+                    } else {
+                        return Mono.just(BookUtils.fail(ResponseMsg.AuthorResponseMsg.INVALID_AUTHOR, ResponseCode.AuthorResponseCode.INVALID_AUTHOR));
+                    }
+                }).defaultIfEmpty(BookUtils.fail(ResponseMsg.FAILED,ResponseCode.FAILED));
     }
 
     public Mono<CounterResponse> count() {

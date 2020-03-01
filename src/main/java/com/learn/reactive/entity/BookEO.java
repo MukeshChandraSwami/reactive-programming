@@ -1,5 +1,6 @@
 package com.learn.reactive.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.learn.reactive.constants.enums.BookLanguage;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,8 +24,10 @@ public class BookEO {
     @Version
     private long version;
     @CreatedDate
+    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm")
     private Date createdAt;
     @LastModifiedDate
+    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm")
     private Date updatedAt;
     private String createdBy;
     private String updatedBy;

@@ -26,4 +26,10 @@ public class ResponseCode {
 
     // Delete
     public static final String NOT_DELETED = "600";
+
+    public static class AuthorResponseCode {
+
+        /************************ Error ************************/
+        public static final String INVALID_AUTHOR = "421";
+    }
 }

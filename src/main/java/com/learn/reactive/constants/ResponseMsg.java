@@ -28,4 +28,11 @@ public class ResponseMsg {
 
     // Delete
     public static final String NOT_DELETED = "Not Deleted";
+
+    public static class AuthorResponseMsg {
+
+
+        /******************** Error **********************/
+        public static final String INVALID_AUTHOR = "Invalid author";
+    }
 }
