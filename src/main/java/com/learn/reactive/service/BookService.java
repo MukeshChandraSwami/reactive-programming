@@ -99,23 +99,38 @@ public class BookService {
 
     public Mono<BookResponse> deleteByAuthor(String authorId) {
 
-        // TO-DO : This is not working correctly. Update it.
-        return authorService.getById(authorId)
+        /*
+        * 1. Check if author is valid or not
+        * 2. Check if books of that author is available to delete or not via counting it.
+        * 3. Delete all books of the author.
+        * 4. Revalidate second step to ensure that books has been deleted.
+        * */
+
+        return authorService.getById(authorId)  // 1
                 .flatMap(authorResponse -> {
                     if(authorResponse.isSuccess() && authorResponse.getResponseCode().equalsIgnoreCase(ResponseCode.FOUND)) {
-                        return bookRepo.deleteByAuthor(authorId)
-                                .thenMany(findByAuthorId(authorId))
-                                .next()
-                                .map(bookResponse -> {
-                                    System.out.println("Book Response :- " + bookResponse);
-                                    if(bookResponse.isSuccess() && bookResponse.getResponseCode().equalsIgnoreCase(ResponseCode.FOUND)) {
-                                        return BookUtils.fail(ResponseMsg.NOT_DELETED, ResponseCode.NOT_DELETED);
-                                    } else if(bookResponse.getResponseCode().equalsIgnoreCase(ResponseCode.NOT_FOUND)) {
-                                        return BookUtils.fail(ResponseMsg.NOT_FOUND,ResponseCode.NOT_FOUND);
+                       return countByAuthor(authorId)   // 2
+                                .flatMap(bookCounterResponse -> {
+                                    if(bookCounterResponse.isSuccess()
+                                            && bookCounterResponse.getResponseCode().equalsIgnoreCase(ResponseCode.SUCCESS)) {
+                                        if(bookCounterResponse.getCount() > 0) {
+                                            return bookRepo.deleteByAuthor(authorId)    // 3
+                                                    .then(countByAuthor(authorId))  // 4
+                                                    .map(bookCounterResponseAfterDeletion -> {
+                                                        if(bookCounterResponseAfterDeletion.isSuccess()
+                                                                && bookCounterResponseAfterDeletion.getResponseCode().equalsIgnoreCase(ResponseCode.SUCCESS)) {
+                                                            return BookUtils.success(ResponseMsg.DELETED, ResponseCode.DELETED, null);
+                                                        } else {
+                                                            return BookUtils.fail(ResponseMsg.FAILED,ResponseCode.FAILED);
+                                                        }
+                                                    });
+                                        } else {
+                                            return Mono.just(BookUtils.success(ResponseMsg.NO_DATA_FOUND, ResponseCode.NO_DATA_FOUND, null));
+                                        }
                                     } else {
-                                        return BookUtils.success(ResponseMsg.DELETED, ResponseCode.DELETED, null);
+                                        return Mono.just(BookUtils.fail(ResponseMsg.FAILED, ResponseCode.FAILED));
                                     }
-                                });
+                                }).defaultIfEmpty(BookUtils.fail(ResponseMsg.FAILED,ResponseCode.FAILED));
                     } else {
                         return Mono.just(BookUtils.fail(ResponseMsg.AUTHORS_NOT_FOUD,ResponseCode.NOT_FOUND));
                     }
@@ -151,6 +166,14 @@ public class BookService {
                 .map(counter -> {
                     return new CounterResponse(true, ResponseMsg.SUCCESS, ResponseCode.SUCCESS, counter);
                 }).defaultIfEmpty(new CounterResponse(false,ResponseMsg.FAILED,ResponseCode.FAILED,0L));
+    }
+
+    public Mono<CounterResponse> countByAuthor(String authorId) {
+
+        return bookRepo.countByAuthor(authorId)
+                .map(counter -> {
+                    return new CounterResponse(true, ResponseMsg.SUCCESS, ResponseCode.SUCCESS, counter);
+                }).defaultIfEmpty(new CounterResponse(false, ResponseMsg.FAILED, ResponseCode.FAILED,0L));
     }
 
 }

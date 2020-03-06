@@ -88,4 +88,12 @@ public class BooksHandler {
                 .body(bookService.count(), CounterResponse.class);
     }
 
+    public Mono<ServerResponse> countByAuthor(ServerRequest request) {
+        String authorId = request.pathVariable("authorId");
+
+        return ServerResponse.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(bookService.countByAuthor(authorId),CounterResponse.class);
+    }
+
 }

@@ -12,4 +12,6 @@ public interface BookRepo extends ReactiveMongoRepository<BookEO,String> {
     Flux<BookEO> findByAuthor(String author);
 
     Mono<Void> deleteByAuthor(String author);
+
+    Mono<Long> countByAuthor(String author);
 }

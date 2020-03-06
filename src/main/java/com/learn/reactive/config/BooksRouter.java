@@ -64,6 +64,11 @@ public class BooksRouter {
                         RequestPredicates.GET(ApiEndPoints.BOOK + ApiEndPoints.V1 + ApiEndPoints.COUNT)
                         .and(RequestPredicates.accept(MediaType.APPLICATION_JSON))
                         ,handler::count
+                )
+                .andRoute(
+                        RequestPredicates.GET(ApiEndPoints.BOOK + ApiEndPoints.V1 + ApiEndPoints.AUTHOR + "/{authorId}" + ApiEndPoints.COUNT)
+                        .and(RequestPredicates.accept(MediaType.APPLICATION_JSON))
+                        ,handler::countByAuthor
                 );
     }
 }
