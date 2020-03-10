@@ -170,10 +170,17 @@ public class BookService {
 
     public Mono<CounterResponse> countByAuthor(String authorId) {
 
-        return bookRepo.countByAuthor(authorId)
-                .map(counter -> {
-                    return new CounterResponse(true, ResponseMsg.SUCCESS, ResponseCode.SUCCESS, counter);
-                }).defaultIfEmpty(new CounterResponse(false, ResponseMsg.FAILED, ResponseCode.FAILED,0L));
+        return authorService.getById(authorId)
+                .flatMap(authorResponse -> {
+                    if(authorResponse.isSuccess() && authorResponse.getResponseCode().equalsIgnoreCase(ResponseCode.SUCCESS)) {
+                        return bookRepo.countByAuthor(authorId)
+                                .map(counter -> {
+                                    return new CounterResponse(true, ResponseMsg.SUCCESS, ResponseCode.SUCCESS, counter);
+                                }).defaultIfEmpty(new CounterResponse(false, ResponseMsg.FAILED, ResponseCode.FAILED,0L));
+                    } else {
+                        return Mono.just(new CounterResponse(false, ResponseMsg.AUTHORS_NOT_FOUD, ResponseCode.NOT_FOUND, 0L));
+                    }
+                }).defaultIfEmpty(new CounterResponse(false,ResponseMsg.FAILED,ResponseCode.FAILED,0L));
     }
 
 }

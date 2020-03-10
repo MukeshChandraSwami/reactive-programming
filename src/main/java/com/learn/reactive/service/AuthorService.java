@@ -50,8 +50,9 @@ public class AuthorService {
                 .defaultIfEmpty(AuthorUtils.fail(ResponseMsg.NOT_CREATED, ResponseCode.NOT_CREATED));
     }
 
-    public Mono<AuthorResponse> deleteById(String id, boolean deleteBooks) {
+    public Mono<AuthorResponse> deleteById(String id, Mono<Boolean> deleteBooks) {
 
+        // TODO : Implement deleteBooks functionality.
         return authorRepo.findById(id)
                 .flatMap(authorEO -> {
                     return authorRepo.deleteById(id)

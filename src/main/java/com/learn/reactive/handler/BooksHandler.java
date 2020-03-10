@@ -1,5 +1,6 @@
 package com.learn.reactive.handler;
 
+import com.learn.reactive.constants.ApiEndPoints;
 import com.learn.reactive.request.BookRequest;
 import com.learn.reactive.response.BookResponse;
 import com.learn.reactive.response.CounterResponse;
@@ -26,7 +27,7 @@ public class BooksHandler {
 
     public Mono<ServerResponse> getById(ServerRequest request) {
 
-        String id = request.pathVariable("id");
+        String id = request.pathVariable(ApiEndPoints.ID);
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(bookService.findById(id), BookResponse.class);
@@ -34,7 +35,7 @@ public class BooksHandler {
 
     public Mono<ServerResponse> getByAuthorId(ServerRequest request) {
 
-        String authorId = request.pathVariable("authorId");
+        String authorId = request.pathVariable(ApiEndPoints.AUTHOR_ID);
 
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_STREAM_JSON)
@@ -51,7 +52,7 @@ public class BooksHandler {
     }
 
     public Mono<ServerResponse> deleteById(ServerRequest request) {
-        String id =  request.pathVariable("id");
+        String id =  request.pathVariable(ApiEndPoints.ID);
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(bookService.deleteById(id),BookResponse.class);
@@ -65,7 +66,7 @@ public class BooksHandler {
 
     public Mono<ServerResponse> deleteByAuthor(ServerRequest request) {
 
-        String authorId =  request.pathVariable("authorId");
+        String authorId =  request.pathVariable(ApiEndPoints.AUTHOR_ID);
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(bookService.deleteByAuthor(authorId),BookResponse.class);
@@ -73,7 +74,7 @@ public class BooksHandler {
 
     public Mono<ServerResponse> update(ServerRequest request) {
 
-        String id = request.pathVariable("id");
+        String id = request.pathVariable(ApiEndPoints.ID);
         Mono<BookRequest> bookRequestMono = request.bodyToMono(BookRequest.class);
         return bookRequestMono.flatMap(bookRequest -> {
             return ServerResponse.ok()
@@ -89,7 +90,7 @@ public class BooksHandler {
     }
 
     public Mono<ServerResponse> countByAuthor(ServerRequest request) {
-        String authorId = request.pathVariable("authorId");
+        String authorId = request.pathVariable(ApiEndPoints.AUTHOR_ID);
 
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_JSON)

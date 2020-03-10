@@ -26,12 +26,12 @@ public class BooksRouter {
                         ,handler::getAllBooks
                 )
                .andRoute(
-                        RequestPredicates.GET(ApiEndPoints.BOOK + ApiEndPoints.V1 + "/{id}" + ApiEndPoints.GET_API)
+                        RequestPredicates.GET(ApiEndPoints.BOOK + ApiEndPoints.V1 + ApiEndPoints.ID_PARAM + ApiEndPoints.GET_API)
                        .and(RequestPredicates.accept(MediaType.APPLICATION_JSON))
                        ,handler::getById
                 )
                 .andRoute(
-                        RequestPredicates.GET(ApiEndPoints.BOOK + ApiEndPoints.V1 + ApiEndPoints.AUTHOR + "/{authorId}" + ApiEndPoints.GET_API)
+                        RequestPredicates.GET(ApiEndPoints.BOOK + ApiEndPoints.V1 + ApiEndPoints.AUTHOR + ApiEndPoints.AUTHOR_ID_PARAM + ApiEndPoints.GET_API)
                         .and(RequestPredicates.accept(MediaType.APPLICATION_JSON))
                         ,handler::getByAuthorId
                 )
@@ -41,7 +41,7 @@ public class BooksRouter {
                         ,handler::create
                 )
                 .andRoute(
-                        RequestPredicates.DELETE(ApiEndPoints.BOOK + ApiEndPoints.V1 + "/{id}" + ApiEndPoints.DELETE_API)
+                        RequestPredicates.DELETE(ApiEndPoints.BOOK + ApiEndPoints.V1 + ApiEndPoints.ID_PARAM + ApiEndPoints.DELETE_API)
                         .and(RequestPredicates.accept(MediaType.APPLICATION_JSON))
                         ,handler::deleteById
                 )
@@ -51,12 +51,12 @@ public class BooksRouter {
                         ,handler::deleteAll
                 )
                 .andRoute(
-                        RequestPredicates.DELETE(ApiEndPoints.BOOK + ApiEndPoints.V1 + ApiEndPoints.AUTHOR + "/{authorId}" + ApiEndPoints.DELETE_API)
+                        RequestPredicates.DELETE(ApiEndPoints.BOOK + ApiEndPoints.V1 + ApiEndPoints.AUTHOR + ApiEndPoints.AUTHOR_ID_PARAM + ApiEndPoints.DELETE_API)
                         .and(RequestPredicates.accept(MediaType.APPLICATION_JSON))
                         ,handler::deleteByAuthor
                 )
                 .andRoute(
-                        RequestPredicates.PUT(ApiEndPoints.BOOK + ApiEndPoints.V1 + "/{id}" + ApiEndPoints.PUT_API)
+                        RequestPredicates.PUT(ApiEndPoints.BOOK + ApiEndPoints.V1 + ApiEndPoints.ID_PARAM + ApiEndPoints.PUT_API)
                         .and(RequestPredicates.accept(MediaType.APPLICATION_JSON))
                         ,handler::update
                 )
@@ -66,7 +66,7 @@ public class BooksRouter {
                         ,handler::count
                 )
                 .andRoute(
-                        RequestPredicates.GET(ApiEndPoints.BOOK + ApiEndPoints.V1 + ApiEndPoints.AUTHOR + "/{authorId}" + ApiEndPoints.COUNT)
+                        RequestPredicates.GET(ApiEndPoints.BOOK + ApiEndPoints.V1 + ApiEndPoints.AUTHOR + ApiEndPoints.AUTHOR_ID_PARAM + ApiEndPoints.COUNT)
                         .and(RequestPredicates.accept(MediaType.APPLICATION_JSON))
                         ,handler::countByAuthor
                 );

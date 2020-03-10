@@ -11,11 +11,21 @@ public class ApiEndPoints {
     public static final String COUNT = "/count";
     public static final String SLASH = "/";
 
+    public static final String ID = "id";
+    public static final String AUTHOR_ID = "authorId";
+    public static final String BOOK_ID = "bookId";
+
+    public static final String ID_PARAM = "/{" + ID + "}";
+    public static final String AUTHOR_ID_PARAM = "/{" + AUTHOR_ID + "}";
+    public static final String BOOK_ID_PARAM = "/{" + BOOK_ID + "}";
+
     // API versions
     public static final String V1 = "/v1";
     public static final String V2 = "/v2";
 
-    // Author API end points
+    // API end points
     public static final String AUTHOR = "/author";
     public static final String BOOK = "/book";
+    public static final String NOTIFICATION = "/notification";
+    public static final String STREAM = "/stream";
 }
