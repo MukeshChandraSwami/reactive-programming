@@ -1,9 +1,13 @@
 package com.learn.reactive.fluxandmono.mono;
 
+import org.junit.Assert;
 import org.junit.Test;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
+
+import java.util.Optional;
+import java.util.stream.Stream;
 
 public class MonoTest {
 
@@ -52,5 +56,28 @@ public class MonoTest {
         Mono<Boolean> booleanMono = Mono.empty()
                 .hasElement();
         booleanMono.subscribe(System.out::println);
+    }
+
+    @Test
+    public void monoTestToGetValueOutOfWrapper_Blocking(){
+
+        Mono<String> mono = Mono.just("Reactive Programming")
+                .log();
+        Optional<String> optional = mono.blockOptional();
+
+        String monoVal = optional.get();
+        Assert.assertEquals(monoVal,"Reactive Programming");
+    }
+
+    @Test
+    public void monoTestToGetValueOutOfWrapper_NonBlocking(){
+
+        Mono<String> mono = Mono.just("Reactive Programming")
+                .log();
+        mono.subscribe(this::getValueOfMono);
+    }
+
+    private void getValueOfMono(String s) {
+        System.out.println(s);
     }
 }
